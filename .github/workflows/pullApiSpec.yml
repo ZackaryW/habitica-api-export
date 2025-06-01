@@ -8,10 +8,14 @@ on:
 jobs:
   pull-api-spec:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for pushing changes
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use the default GitHub token
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -69,8 +73,8 @@ jobs:
       - name: Commit and push changes
         if: success()
         run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
           git commit -m "Update API specification [skip ci]" || exit 0
-          git push 
+          git push origin HEAD:${{ github.ref }} 
