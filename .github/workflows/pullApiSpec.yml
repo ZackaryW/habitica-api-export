@@ -1,0 +1,43 @@
+name: Pull API Specification
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+  schedule:
+    - cron: '0 0 1 1,7 *'  # Runs at midnight UTC on January 1st and July 1st
+
+jobs:
+  pull-api-spec:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Configure Git sparse checkout
+        run: |
+          git init
+          git remote add origin https://github.com/HabitRPG/habitica.git
+          git config core.sparseCheckout true
+          echo "website/server" >> .git/info/sparse-checkout
+          git pull origin develop --depth=1
+
+      - name: Install dependencies
+        run: npm install apidoc
+
+      - name: Run export script
+        run: node .github/scripts/export.js 
+
+      - name: Commit and push changes
+        if: success()
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add .
+          git commit -m "Update API specification [skip ci]" || exit 0
+          git push 
