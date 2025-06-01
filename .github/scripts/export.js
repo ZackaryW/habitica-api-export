@@ -2,8 +2,8 @@ const path = require('path');
 const apidoc = require("apidoc");
 const fs = require('fs');
 
-// Get input path from command line or use default
-const inputPath = process.argv[2] || path.resolve('habitica/website/server/');
+// Get input path from environment variable or use default
+const inputPath = process.env.HABITICA_PATH || path.resolve('habitica/website/server/');
 // Save directly to root directory
 const targetPath = process.cwd();
 const outputFile = path.resolve(targetPath, 'api-spec.json');

@@ -22,16 +22,49 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache Habitica repository
+        uses: actions/cache@v3
+        id: habitica-cache
+        with:
+          path: /tmp/habitica-cache
+          key: habitica-repo-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            habitica-repo-
+
       - name: Configure Git sparse checkout
         run: |
+          # Create temporary directory for Habitica
+          TEMP_DIR="/tmp/habitica-temp"
+          rm -rf "$TEMP_DIR"
+          mkdir -p "$TEMP_DIR"
+          cd "$TEMP_DIR"
+          
+          # Initialize fresh git repository
           git init
           git remote add origin https://github.com/HabitRPG/habitica.git
           git config core.sparseCheckout true
           echo "website/server" >> .git/info/sparse-checkout
+          
+          # Try to use cache if available
+          if [ -d "/tmp/habitica-cache" ]; then
+            cp -r /tmp/habitica-cache/. .
+          fi
+          
+          # Pull latest changes
           git pull origin develop --depth=1
+          
+          # Cache the repository for future use
+          mkdir -p /tmp/habitica-cache
+          cp -r . /tmp/habitica-cache/
+          
+          # Return to workspace
+          cd "$GITHUB_WORKSPACE"
 
       - name: Generate API specification
-        run: npm run export
+        run: |
+          # Set input path to the temporary directory
+          export HABITICA_PATH="/tmp/habitica-temp/website/server"
+          npm run export
 
       - name: Commit and push changes
         if: success()
