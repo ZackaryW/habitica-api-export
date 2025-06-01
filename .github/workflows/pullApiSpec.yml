@@ -19,6 +19,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Install dependencies
+        run: |
+          npm install
+          npm ci
+
       - name: Configure Git sparse checkout
         run: |
           git init
@@ -27,11 +32,8 @@ jobs:
           echo "website/server" >> .git/info/sparse-checkout
           git pull origin develop --depth=1
 
-      - name: Install dependencies
-        run: npm install apidoc
-
       - name: Run export script
-        run: node .github/scripts/export.js 
+        run: npm run export
 
       - name: Commit and push changes
         if: success()

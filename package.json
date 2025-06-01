@@ -1,0 +1,12 @@
+{
+  "name": "habitica-api-export",
+  "version": "1.0.0",
+  "description": "Export Habitica API specification",
+  "private": true,
+  "scripts": {
+    "export": "node .github/scripts/export.js"
+  },
+  "dependencies": {
+    "apidoc": "^1.2.0"
+  }
+} 
