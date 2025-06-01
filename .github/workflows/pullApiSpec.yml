@@ -20,9 +20,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm ci
+        run: npm ci
 
       - name: Configure Git sparse checkout
         run: |
@@ -32,7 +30,7 @@ jobs:
           echo "website/server" >> .git/info/sparse-checkout
           git pull origin develop --depth=1
 
-      - name: Run export script
+      - name: Generate API specification
         run: npm run export
 
       - name: Commit and push changes
