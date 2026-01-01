@@ -4442,14 +4442,6 @@
             "field": "messageGroupAlreadyInParty",
             "isArray": false,
             "description": ""
-          },
-          {
-            "group": "401",
-            "type": "NotAuthorized",
-            "optional": false,
-            "field": "chatPrivilegesRevoked",
-            "isArray": false,
-            "description": "<p>You cannot do this because your chat privileges have been removed...</p>"
           }
         ]
       }
@@ -6288,6 +6280,16 @@
     }
   },
   {
+    "type": "delete",
+    "url": "/api/v4/members/:memberId",
+    "title": "Delete a user",
+    "name": "DeleteMember",
+    "group": "Member",
+    "version": "0.0.0",
+    "filename": "controllers/api-v4/members.js",
+    "groupTitle": "Member"
+  },
+  {
     "type": "get",
     "url": "/api/v3/challenges/:challengeId/members/:memberId",
     "title": "Get a challenge member progress",
@@ -7136,6 +7138,16 @@
       }
     },
     "filename": "controllers/api-v3/members.js",
+    "groupTitle": "Member"
+  },
+  {
+    "type": "get",
+    "url": "/api/v4/members/:memberId/purchase-history",
+    "title": "Get members purchase history",
+    "name": "MemberGetPurchaseHistory",
+    "group": "Member",
+    "version": "0.0.0",
+    "filename": "controllers/api-v4/members.js",
     "groupTitle": "Member"
   },
   {
@@ -11531,6 +11543,65 @@
     "groupTitle": "User"
   },
   {
+    "type": "put",
+    "url": "/api/v4/user/auth/check-email",
+    "title": "Check if email is used",
+    "description": "<p>Check if the email is already used by another user</p>",
+    "name": "CheckEmail",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Body Parameters": [
+          {
+            "group": "Body",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "isArray": false,
+            "description": "<p>The checked email address.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.email",
+            "isArray": false,
+            "description": "<p>The checked email address</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.valid",
+            "isArray": false,
+            "description": "<p>True if available, false if in use</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "controllers/api-v4/auth.js",
+    "groupTitle": "User"
+  },
+  {
     "type": "post",
     "url": "/api/v3/user/move-pinned-item/:type/:path/move/to/:position",
     "title": "Move a pinned item in the rewards column to a new position after being sorted",
@@ -11802,11 +11873,17 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "String",
             "optional": false,
-            "field": "data",
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.apiToken",
             "isArray": false,
-            "description": "<p>An empty object</p>"
+            "description": "<p>The new apiToken</p>"
           }
         ]
       }
@@ -13507,16 +13584,6 @@
     },
     "version": "0.0.0",
     "filename": "controllers/api-v3/user.js",
-    "groupTitle": "User"
-  },
-  {
-    "type": "get",
-    "url": "/api/v4/user/purchase-history",
-    "title": "Get users purchase history",
-    "name": "UserGetPurchaseHistory",
-    "group": "User",
-    "version": "0.0.0",
-    "filename": "controllers/api-v4/members.js",
     "groupTitle": "User"
   },
   {
